@@ -3,11 +3,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Output, Input
-from bond import make_bond
 
 # Reference: https://realpython.com/python-dash/#how-to-set-up-your-local-environment
 
-data = pd.read_csv('df.csv')
+data = pd.read_csv('./app/df.csv')
 data['Date'] = pd.to_datetime(data['Date'], format='%Y-%m-%d')
 external_stylesheets = [
     {
@@ -161,5 +160,5 @@ def update_charts(start_date, end_date):
     return positive_figure, active_figure, recoveries_figure, deaths_figure
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(host="0.0.0.0", port="8050",debug=True)
     
