@@ -3,44 +3,14 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Output, Input
+from bond import make_bond
 
 data = pd.read_csv('df.csv')
 data['Date'] = pd.to_datetime(data['Date'], format='%Y-%m-%d')
 app = dash.Dash(__name__)
 
-# app.layout = html.Div(
-#     children=[
-#         html.H1(children="Daily Covid Cases in Jakarta",
-#                 style={"fontSize": "48px", "color": "red"}),
-#         html.P(
-#             children="Analyze the growth of covid cases in Jakarta in June 2021",
-#         ),
-#         dcc.Graph(
-#             figure={
-#                 "data": [
-#                     {
-#                         "x": data["Date"],
-#                         "y": data["Daily Positive Cases"],
-#                         "type": "lines",
-#                     },
-#                 ],
-#                 "layout": {"title": "Daily Positive Cases"},
-#             },
-#         ),
-#         dcc.Graph(
-#             figure={
-#                 "data": [
-#                     {
-#                         "x": data["Date"],
-#                         "y": data["Active Cases"],
-#                         "type": "lines",
-#                     },
-#                 ],
-#                 "layout": {"title": "Active Cases"},
-#             },
-#         ),
-#     ]
-# )
+def get_avg():
+    return data['Daily Positive Cases'].mean()
 
 app.layout = html.Div(
     children=[
@@ -138,3 +108,4 @@ def update_charts(start_date, end_date):
 
 if __name__ == "__main__":
     app.run_server(debug=True)
+    
