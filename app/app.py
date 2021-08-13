@@ -5,9 +5,18 @@ import pandas as pd
 from dash.dependencies import Output, Input
 from bond import make_bond
 
+# Reference: https://realpython.com/python-dash/#how-to-set-up-your-local-environment
+
 data = pd.read_csv('df.csv')
 data['Date'] = pd.to_datetime(data['Date'], format='%Y-%m-%d')
-app = dash.Dash(__name__)
+external_stylesheets = [
+    {
+        "href": "https://fonts.googleapis.com/css2?"
+                "family=Lato:wght@400;700&display=swap",
+        "rel": "stylesheet",
+    },
+]
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 def get_avg():
     return data['Daily Positive Cases'].mean()
@@ -15,9 +24,10 @@ def get_avg():
 app.layout = html.Div(
     children=[
         html.H1(children="Daily Covid Cases in Jakarta",
-                style={"fontSize": "48px", "color": "red"}),
+                className="header-title"),
         html.P(
-            children="Analyze the growth of covid cases in Jakarta in June 2021",
+            children="Daily positive cases, active cases, recoveries and deaths in June 2021",
+            className='header-description',
         ),
         html.Div(
             children=[
@@ -32,7 +42,8 @@ app.layout = html.Div(
                     start_date=data.Date.min().date(),
                     end_date=data.Date.max().date(),
                 ),
-            ]
+            ],
+            className="wrapper"
         ),
         html.Div(
             children=[
@@ -48,6 +59,18 @@ app.layout = html.Div(
                     ),
                     className="card",
                 ),
+                html.Div(
+                    children=dcc.Graph(
+                        id="recoveries-chart", config={"displayModeBar": False},
+                    ),
+                    className="card",
+                ),
+                html.Div(
+                    children=dcc.Graph(
+                        id="deaths-chart", config={"displayModeBar": False},
+                    ),
+                    className="card",
+                ),
             ],
             className="wrapper",
         ),
@@ -55,7 +78,7 @@ app.layout = html.Div(
 )
 
 @app.callback(
-    [Output("daily-positive-chart", "figure"), Output("active-chart", "figure")],
+    [Output("daily-positive-chart", "figure"), Output("active-chart", "figure"), Output("recoveries-chart", "figure"), Output("deaths-chart", "figure")],
     [
         Input("date-range", "start_date"),
         Input("date-range", "end_date"),
@@ -74,7 +97,6 @@ def update_charts(start_date, end_date):
                 "x": filtered_data["Date"],
                 "y": filtered_data["Daily Positive Cases"],
                 "type": "lines",
-                "hovertemplate": "%{y:.2f}<extra></extra>",
             },
         ],
         "layout": {
@@ -104,7 +126,39 @@ def update_charts(start_date, end_date):
             "colorway": ["#E12D39"],
         },
     }
-    return positive_figure, active_figure
+
+    recoveries_figure = {
+        "data": [
+            {
+                "x": filtered_data["Date"],
+                "y": filtered_data["Daily Recoveries"],
+                "type": "lines",
+            },
+        ],
+        "layout": {
+            "title": {"text": "Recovery Cases", "x": 0.05, "xanchor": "left"},
+            "xaxis": {"fixedrange": True},
+            "yaxis": {"fixedrange": True},
+            "colorway": ["#17B897"],
+        },
+    }
+
+    deaths_figure = {
+        "data": [
+            {
+                "x": filtered_data["Date"],
+                "y": filtered_data["Deaths"],
+                "type": "lines",
+            },
+        ],
+        "layout": {
+            "title": {"text": "Deaths", "x": 0.05, "xanchor": "left"},
+            "xaxis": {"fixedrange": True},
+            "yaxis": {"fixedrange": True},
+            "colorway": ["#E12D39"],
+        },
+    }
+    return positive_figure, active_figure, recoveries_figure, deaths_figure
 
 if __name__ == "__main__":
     app.run_server(debug=True)
