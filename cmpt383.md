@@ -1,12 +1,12 @@
-Topic idea: Calculation on the web (from the project ideas page)
+Topic idea: Python dashboard hosted on a Flask and Express Server. 
 
 Programming Languages
-- Scripting Language - Javascript: Implement behaviour in the browser
-- Scripting Language - Python: Generate HTTP responses.
+- Scripting Language - Javascript: Implement the starting server and the landing page
+- Scripting Language - Python: Generate dashboard for the data and run the secondary server
 - System Language - C++: Calculation
 
 Inter-language communication methods
-- RPC (REST) server: To make request from one another
-- foreign function interface: Call function from one language to another 
+- RPC (REST) server: To make request from one another. The JS Express initial server calls a Flask (python) that hosts the dashboard.
+- foreign function interface: CDLL for calling C/C++ function from python
 
 Deployment technology: Docker containers

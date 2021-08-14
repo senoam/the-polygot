@@ -3,6 +3,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Output, Input
+# import calculate
+from ctypes import *
 
 # Reference: https://realpython.com/python-dash/#how-to-set-up-your-local-environment
 
@@ -16,6 +18,26 @@ external_stylesheets = [
     },
 ]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+# Call C function
+# my_func = CDLL('./app/calculate.so')
+# print(my_func.plusFive(322))
+def C_function(col):
+    print('Highest positive cases:')
+    print(col.max())
+    print('Lowest positive cases:')
+    print(col.min())
+    print('Range positive cases:')
+    print(col.max() - col.min())
+
+C_function(data['Daily Positive Cases'])
+
+# handle = ctypes.cdll.LoadLibrary('./app/calc.so')
+# handle.my_print.argtypes = [ctypes.c_int]
+# res = plusFive(322)
+# print(res)
+
+
 
 def get_avg():
     return data['Daily Positive Cases'].mean()
