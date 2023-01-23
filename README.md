@@ -21,15 +21,18 @@ Communication Methods:
 * Inter-language communication methods
 
 * RPC (REST) server: To make request from one another. The JS Express initial server calls a Flask (python) that hosts the dashboard.
-foreign function interface: CDLL for calling C/C++ function from python Deployment technology: Docker containers
-To get the project working you should:
+* Foreign function interface: CDLL for calling C/C++ function from python 
+* Deployment technology: Docker containers
+
 
 ## How to Run
+To get the project working you should:
 
 Open the docker application on your computer Open terminal then type and run
-
+```
 docker-compose build
 docker-compose up
+```
 When the application is running open http://localhost:3000 to view landing webpage. Click the link on the webpage to view the dashboard. THe date range can be changed. The result of the C calculation can be seen in the console.
 
 ## Things you should be looking at
